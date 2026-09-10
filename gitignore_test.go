@@ -882,6 +882,17 @@ func TestMatchVsGitCheckIgnore(t *testing.T) {
 			},
 		},
 		{
+			name:     "dir-only pattern, file of the same name inside it",
+			patterns: "deps/\n",
+			paths: []checkPath{
+				{"deps/clog/deps", false},
+				{"deps/deps", false},
+				{"deps/a/b/deps", false},
+				{"deps/clog/other.txt", false},
+				{"other/deps", false},
+			},
+		},
+		{
 			name:     "mixed patterns",
 			patterns: "*.log\n!important.log\nbuild/\n/dist\nfoo/**/bar\n",
 			paths: []checkPath{

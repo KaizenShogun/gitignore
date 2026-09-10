@@ -411,8 +411,11 @@ func matchPattern(p *pattern, pathSegs []string, isDir bool) bool {
 		// Dir-only patterns (trailing slash): match the directory itself,
 		// or match descendants (files/dirs under the matched directory).
 		if matchSegments(p.segments, segs) {
-			// Exact match. For non-dir paths, the pattern requires a directory.
-			return isDir
+			// A non-dir path may still be under a matched directory, so let
+			// exclusions fall through; negations don't inherit downwards.
+			if isDir || p.negate {
+				return isDir
+			}
 		}
 		// Only do descendant matching when the pattern identifies a specific
 		// directory (has at least one non-** segment). Pure ** patterns like
